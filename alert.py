@@ -23,7 +23,19 @@ def lineNotify(token, msg, picURI):
     files = {'imageFile': open(picURI, 'rb')}
     r = requests.post(url, headers = headers, params = payload, files = files)
     return r.status_code
-
+def highlight_col(x):
+    #copy df to new - original data are not changed
+    df = x.copy()
+    #set by condition
+    print('fun', target_index)
+    mask = df.index == target_index
+    df.loc[mask, :] = 'background-color: yellow'
+    df.loc[~mask,:] = 'background-color: ""'
+    return df   
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return array[idx]    
 def alert_checker():
     for file in glob.glob("./5K/*.csv"):
         name =  path.basename(file)
@@ -49,8 +61,11 @@ def alert_checker():
             df2 = df2.fillna(0)
             df15 = df2.sort_values('ma30', ascending=False).head(15)
             df15 = df15.sort_index(ascending=False)
+
+            alist = list(df15.index.values)
+            target_index = find_nearest(alist, df.iloc[-1]['當盤成交價'])
+            df15 = df15.style.apply(highlight_col, axis=None)
             dfi.export(df15, 'df15.png')
-            print(notice)
             
             lineNotify('EDC3C8i9dTQz6n5AUBiLCtHWJmpn3odYjr5gtdR1p7h', notice, 'df15.png')
         
