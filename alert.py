@@ -12,6 +12,8 @@ from bs4 import BeautifulSoup
 s2 = sched.scheduler(time.time, time.sleep)
 import dataframe_image as dfi
 import glob
+import numpy as np
+target_index = 0
 
 def lineNotify(token, msg, picURI):
     url = "https://notify-api.line.me/api/notify"
@@ -27,7 +29,7 @@ def highlight_col(x):
     #copy df to new - original data are not changed
     df = x.copy()
     #set by condition
-    print('fun', target_index)
+    print('MA30最近壓力支撐', target_index)
     mask = df.index == target_index
     df.loc[mask, :] = 'background-color: yellow'
     df.loc[~mask,:] = 'background-color: ""'
@@ -48,9 +50,9 @@ def alert_checker():
                 notice += '漲兩根!'
             if(df.iloc[-1]['漲幅']<df.iloc[-2]['漲幅'] and df.iloc[-2]['漲幅']<df.iloc[-3]['漲幅']):
                 notice += '跌兩根!'
-            if(df.iloc[-1]['當盤成交量']>3*df.iloc[-2]['當盤成交量'] or df.iloc[-1]['當盤成交量']>3*df.iloc[-3]['當盤成交量']):
+            if(df.iloc[-1]['當盤成交量']>3*df.iloc[-2]['當盤成交量'] or df.iloc[-1]['當盤成交量']>3*df.iloc[-3]['當盤成交量'] or df.iloc[-2]['當盤成交量']>3*df.iloc[-3]['當盤成交量']):
                 notice += '有大量!'
-        if len(notice) >0:
+        if len(notice) >5:
             notice = '['+ name +'] 注意!!'+ notice
             df_filter = df.filter(["五分K", "當盤成交價", "當盤成交量","累積成交量"])
             dfi.export(df_filter[-3:], 'df_styled.png')
@@ -61,7 +63,7 @@ def alert_checker():
             df2 = df2.fillna(0)
             df15 = df2.sort_values('ma30', ascending=False).head(15)
             df15 = df15.sort_index(ascending=False)
-
+            global target_index
             alist = list(df15.index.values)
             target_index = find_nearest(alist, df.iloc[-1]['當盤成交價'])
             df15 = df15.style.apply(highlight_col, axis=None)
