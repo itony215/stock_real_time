@@ -9,7 +9,15 @@ python 5k.py
 ```
 python alert.py
 ```
-
+## Cron Job
+crontab -e 編輯
+crontab -l 列表
+```
+30 21 * * 1-5 /usr/bin/python3 /home/pitaya/Documents/stock/get_price_volumn.py >> /home/pitaya/Documents/stock/result.txt 2>&1
+00 09 * * 1-5 /usr/bin/python3 /home/pitaya/Documents/stock/5k.py >> /home/pitaya/Documents/stock/5k_log.txt 2>&1
+04 09 * * 1-5 /usr/bin/python3 /home/pitaya/Documents/stock/alert.py >> /home/pitaya/Documents/stock/alert_log.txt 2>&1
+45 13 * * 1-5 sh /home/pitaya/Documents/stock/backup.sh
+```
 ## 資料來源
 
 [台灣證券交易所 - 基本市況報導網站](https://mis.twse.com.tw/stock/index.jsp)
