@@ -67,7 +67,7 @@ def stock_crawler(targets):
     if time >= start_time and time <= end_time:
         s.enter(5, 0, stock_crawler, argument=(targets,))
 
-stock_list = stock_input['ID'].to_numpy()
+stock_list = df['ID'].to_numpy()
 
 s.enter(1, 0, stock_crawler, argument=(stock_list,))
 s.run()
