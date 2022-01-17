@@ -35,7 +35,10 @@ def stock_crawler(targets):
         al = df.loc[df['股票代號'] == int(r['c'])].AL.item()
 
         if (r['z'] == '-'):
-            r['z'] = r['a'].split('_')[0]
+            if (r['a'] == '-'):
+                r['z'] = r['g'].split('_')[0]
+            else:
+                r['z'] = r['a'].split('_')[0]
         if(float(r['z'])>=ah):
             notice = 'AH'
         elif(float(r['z'])>=nh):
@@ -62,7 +65,7 @@ def stock_crawler(targets):
     print("更新時間:" + str(time.hour)+":"+str(time.minute)+":"+str(time.second))
 
     start_time = datetime.strptime(str(time.date())+'8:50', '%Y-%m-%d%H:%M')
-    end_time =  datetime.strptime(str(time.date())+'13:33', '%Y-%m-%d%H:%M')
+    end_time =  datetime.strptime(str(time.date())+'13:26', '%Y-%m-%d%H:%M')
 
     if time >= start_time and time <= end_time:
         s.enter(5, 0, stock_crawler, argument=(targets,))
