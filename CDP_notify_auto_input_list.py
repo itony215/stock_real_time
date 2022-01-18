@@ -28,17 +28,19 @@ def stock_crawler(targets):
 
     data = json.loads(urlopen(query_url).read())    
     for r in data['msgArray']:
+        if (r['z'] == '-'):
+            if(r['a'] == '-'):
+                r['z'] = r['g'].split('_')[0]
+            else:
+                r['z'] = r['a'].split('_')[0]
         notice=""
         ah = df.loc[df['股票代號'] == int(r['c'])].AH.item()
         nh = df.loc[df['股票代號'] == int(r['c'])].NH.item()
         nl = df.loc[df['股票代號'] == int(r['c'])].NL.item()
         al = df.loc[df['股票代號'] == int(r['c'])].AL.item()
 
-        if (r['z'] == '-'):
-            if (r['a'] == '-'):
-                r['z'] = r['g'].split('_')[0]
-            else:
-                r['z'] = r['a'].split('_')[0]
+        #print(r['z'])
+        #print(ah)
         if(float(r['z'])>=ah):
             notice = 'AH'
         elif(float(r['z'])>=nh):
@@ -48,12 +50,17 @@ def stock_crawler(targets):
         elif(float(r['z'])<=al):
             notice = 'AL'
         else:
-            print('沒波動: ', r['z'])
-            
+            #print('沒波動: ', r['z'])
+            pass
+
         if(len(notice)>1):
             string = df.loc[df['股票代號'] == int(r['c'])].Notice.item()
             stock_no = int(r['c'])
             if(string == notice):
+                pass
+            elif(string == 'AH' and notice == 'NH'):
+                pass
+            elif(string == 'AL' and notice == 'NL'):
                 pass
             else:
                 df.loc[df.股票代號==stock_no,'Notice'] = notice
