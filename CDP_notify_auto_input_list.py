@@ -30,7 +30,7 @@ def stock_crawler(targets):
         for r in data['msgArray']:
             if (r['z'] == '-'):
                 if(r['a'] == '-'):
-                    r['z'] = r['b'].split('_')[0]
+                    r['z'] = r['b'].split('_')[1]
                 else:
                     r['z'] = r['a'].split('_')[0]
             notice=""
