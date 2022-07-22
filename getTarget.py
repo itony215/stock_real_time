@@ -11,10 +11,10 @@ def lineNotify(token, msg):
     payload = {'message': msg}
     r = requests.post(url, headers = headers, params = payload)
     return r.status_code
-
+notice = '弱勢股:\n'
 with os.scandir('/home/pineapple/Documents/stock/day/') as it:
     for entry in it:
-        notice = ''
+        #print(entry)
         if entry.name.endswith(".json") and entry.is_file():
             #print('2222',entry.name, entry.path)
             with open(entry.path,'r+') as json_file:
@@ -28,5 +28,6 @@ with os.scandir('/home/pineapple/Documents/stock/day/') as it:
     
                 if(avgPrice>openPrice and inMarket>outMarket):
                     print(old_data["symbolName"],old_data["stockId"])
-                    notice = '弱勢股: '+old_data["symbolName"]+old_data["stockId"]
-                    lineNotify('X57Kb4EhV6073WKCE9UU2eT3IBvxmY44LPtmdUwwS8O', notice)
+                    notice += old_data["symbolName"]+old_data["stockId"] + '\n'
+
+lineNotify('X57Kb4EhV6073WKCE9UU2eT3IBvxmY44LPtmdUwwS8O', notice)

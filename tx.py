@@ -8,7 +8,7 @@ today = date.today()
 datestr = today.strftime("%Y%m%d")
 
 def tx_crawler(): 
-    filepath = "./day/"+datestr+"_tx.json"
+    filepath = "/home/pineapple/Documents/stock/tx/"+datestr+"_tx.json"
     try:
         with open(filepath,'r+') as json_file:
             old_data = json.load(json_file)
@@ -28,13 +28,13 @@ def tx_crawler():
     #print(res.text[index-1:-3])
     data_string = '{'+res.text[tick_index-1:-2]
     data = json.loads(data_string)
-    
+    #print(len(data['tick']))
     #script_text = soup.find('tick').get_text()
     #print(soup.tick)
-    if(len(timestamp)<len(data)):
-        timestamp = [x['t'] for x in data]
-        price = [x['p'] for x in data]
-        volumn = [x['v'] for x in data]
+    if(len(timestamp)<len(data['tick'])):
+        timestamp = [x['t'] for x in data['tick']]
+        price = [x['p'] for x in data['tick']]
+        volumn = [x['v'] for x in data['tick']]
         jsonObject = {"timestamp": timestamp, "price": price, "volumn":volumn}
         file = open(filepath, "w")
         json.dump(jsonObject, file)
@@ -48,7 +48,7 @@ def tx_crawler():
     
     #display(df)
     
-    start_time = datetime.strptime(str(time.date())+'08:30', '%Y-%m-%d%H:%M')
+    start_time = datetime.strptime(str(time.date())+'08:55', '%Y-%m-%d%H:%M')
     end_time =  datetime.strptime(str(time.date())+'13:35', '%Y-%m-%d%H:%M')
     
     if time >= start_time and time <= end_time:
