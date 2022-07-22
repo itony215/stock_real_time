@@ -64,11 +64,16 @@ def each_stock(stock_no, datestr, timestamp, openPrice, volumn, inMarket, outMar
         file.close()
 
     else:
-        print('no update')
+        print('no update: ', stock_no)
 
 
 def stock_crawler(): 
-    stock_list = ['2497', '8299','6719','3141','6531','3035','6469','6104','3558','3006','3189','2603','2344','6182','2330','3443']
+    stock_list = ['1605','1795','2002','2303','2313','2317','2327','2330','2340','2344',
+                '2368','2379','2409','2453','2481','2497','2498','2603','2606','2618',
+                '3006','3008','3034','3035','3037','3141','3169','3189','3228','3406',
+                '3443','3532','3558','3675','3680','4162','4755','4768','4919','5269',
+                '5425','5483','6104','6138','6182','6187','6217','6231','6469','6488',
+                '6515','6531','6719','8028','8046','8069','8299','8478','9945']
 
 
     for stock_no in stock_list:
@@ -96,7 +101,7 @@ def stock_crawler():
         try:
             each_stock(stock_no, datestr, timestamp, openPrice, volumn, inMarket, outMarket, avgPrice,filepath)
         except:   
-            print('error: ', filepath) 
+            print('error: ', stock_no) 
             continue
 
     time = datetime.now()  
@@ -108,7 +113,7 @@ def stock_crawler():
     end_time =  datetime.strptime(str(time.date())+'13:35', '%Y-%m-%d%H:%M')
     
     if time >= start_time and time <= end_time:
-        st.enter(60, 0, stock_crawler)
+        st.enter(69, 0, stock_crawler)
 
     
 st.enter(1, 0, stock_crawler)
