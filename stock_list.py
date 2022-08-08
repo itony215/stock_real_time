@@ -26,4 +26,7 @@ df3 = df2.iloc[:, 0:1]
 df3.columns = ['證券名稱']
 
 stock_list_df = df1.append(df3)
-stock_list_df.to_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
+stock_list_df.index.name = 'stock_id'
+stock_list_old = pd.read_pickle("./stock_list.pkl")
+if(len(stock_list_df)> len(stock_list_old)):
+    stock_list_df.to_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
