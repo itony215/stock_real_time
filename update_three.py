@@ -13,14 +13,14 @@ def transform_ym(date):   #民國轉西元
         return str(int(y)+1911) + '-' + m + '-' + d
 
 three = pd.read_pickle("/home/pineapple/Documents/stock/crawler/three/三大法人買賣超.pkl")
-stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/three/stock_total_release.pkl")
+stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_total_release.pkl")
 today = date.today()
 #day = today.strftime("%m/%d")
 #datestr = today.strftime("%Y-%m-%d")
 #datestr = '2022-08-11'
 for stock_id in tqdm(three.index.levels[0]):
     old_date = three.loc[stock_id].iloc[-1].name.strftime("%Y-%m-%d")
-    if(old_date<str(today)):
+    if(old_date<=str(today) and three.loc[(stock_id,old_date)].isna().any()):
         #print(stock_id)
         try:
             r = requests.get('https://concords.moneydj.com/z/zc/zcl/zcl.djhtm?a='+stock_id+'&c='+old_date+'&d='+str(today))
@@ -39,9 +39,12 @@ for stock_id in tqdm(three.index.levels[0]):
                         print('投信 update: ',stock_id,data[i].getText(),data[i+2].getText(),data[i+6].getText())
                 except:
                     print('no new data 投信',stock_id,i)
-                    continue
+                    pass
                 try:
+                    print('old_date',old_date)
+                    print('date', date)
                     if(old_date<=date):
+                        
                         if(three.loc[(stock_id,date)].isna().any()):
                             three.loc[(stock_id,date),'投信買賣超(張)'] = float(data[i+2].getText().replace(',',''))
                             three.loc[(stock_id,date),'投信買賣超%'] = round(float(data[i+2].getText().replace(',',''))/total_release*100,2)
@@ -57,7 +60,7 @@ for stock_id in tqdm(three.index.levels[0]):
                             print('三大 update: ',stock_id,data[i].getText(),data[i+1].getText(),data[i+2].getText(),data[i+3].getText(),data[i+5].getText(),data[i+6].getText(),data[i+7].getText())
                 except:
                     print('no new data 三大',stock_id,i)
-                    continue
+                    pass
         except:
             print('error: ', stock_id)
             continue
