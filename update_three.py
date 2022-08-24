@@ -20,7 +20,7 @@ today = date.today()
 #datestr = '2022-08-11'
 for stock_id in tqdm(three.index.levels[0]):
     old_date = three.loc[stock_id].iloc[-1].name.strftime("%Y-%m-%d")
-    if(old_date<=str(today) and three.loc[(stock_id,old_date)].isna().any()):
+    if(old_date<=str(today) or three.loc[(stock_id,old_date)].isna().any()):
         #print(stock_id)
         try:
             r = requests.get('https://concords.moneydj.com/z/zc/zcl/zcl.djhtm?a='+stock_id+'&c='+old_date+'&d='+str(today))
