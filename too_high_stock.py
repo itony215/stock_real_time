@@ -1,15 +1,4 @@
 import pandas as pd
-import numpy as np
-import requests
-import datetime
-import time
-from io import StringIO
-from bs4 import BeautifulSoup
-import pickle
-import os
-import json
-from datetime import date
-import os.path as path
 
 high = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/最高價.pkl")
 low = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/最低價.pkl")

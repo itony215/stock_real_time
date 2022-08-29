@@ -3,14 +3,14 @@ import numpy as np
 import requests
 from bs4 import BeautifulSoup
 import time
-
+from tqdm import tqdm
 
 
 stock_list_df = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
 stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_total_release.pkl")
 result = []
-for s in stock_list_df.index:
-    r = requests.get('https://fubon-ebrokerdj.fbs.com.tw/z/zc/zcm/zcm_'+str(s)+'.djhtm')
+for s in tqdm(stock_list_df.index):
+    r = requests.get('https://concords.moneydj.com/z/zc/zcm/zcm_'+str(s)+'.djhtm')
     soup = BeautifulSoup(r.text, 'html.parser')
     data = soup.find_all("td", class_ = ["t3n1"])
     #print(data[0].getText().replace(',','')) 
@@ -37,6 +37,7 @@ for s in stock_list_df.index:
         print('Error ', s, stock_list_df[stock_list_df.index==s]['name'].values[0])
         time.sleep(1)
         pass
+    time.sleep(1)
 #new_df = pd.DataFrame(result)
 #new_df.columns =['stock_id','name','total']
 #new_df.set_index('stock_id', inplace=True)

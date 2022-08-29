@@ -10,7 +10,7 @@ from datetime import datetime
 import os
 
 column = ['時間','買賣超(張).3','主力持股(張)']
-stock_total_release = pd.read_pickle("./stock_total_release.pkl")
+stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_total_release.pkl")
 with os.scandir('/home/pineapple/Documents/stock/crawler/margin/data_0804/') as it:
     combine=pd.DataFrame([])
     for entry in tqdm(it):

@@ -10,7 +10,7 @@ def transform_ym(date):   #民國轉西元
         return str(int(y)+1911) + '-' + m + '-' + d
 
 
-margin = pd.read_pickle("./融資融券.pkl")
+margin = pd.read_pickle("./history/融資融券.pkl")
 
 day = datetime.timedelta(days=1)
 today = date.today()
@@ -43,4 +43,4 @@ for stock_id in margin.index.levels[0]:
 #     else:
 #         print('no update')
 margin = margin.sort_index()
-margin.to_pickle("./融資融券_0810.pkl")
+margin.to_pickle("/home/pineapple/Documents/stock/crawler/history/融資融券.pkl")

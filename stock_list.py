@@ -25,8 +25,12 @@ df2=df2[df2.index.str.len() <5]
 df3 = df2.iloc[:, 0:1]
 df3.columns = ['證券名稱']
 
-stock_list_df = df1.append(df3)
+#stock_list_df = df1.append(df3)
+stock_list_df = pd.concat([df1,df3],axis=0)
 stock_list_df.index.name = 'stock_id'
-stock_list_old = pd.read_pickle("./stock_list.pkl")
+
+stock_list_old = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
+print('new', len(stock_list_df))
+print('old', len(stock_list_old))
 if(len(stock_list_df)> len(stock_list_old)):
     stock_list_df.to_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
