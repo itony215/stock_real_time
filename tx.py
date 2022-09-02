@@ -21,13 +21,15 @@ def tx_crawler():
         timestamp= []
         price=[]
         volumn = []
-
-    res = r.get("https://tw.quote.finance.yahoo.net/quote/q?type=tick&perd=1m&mkt=10&sym=%23001")
-    #print(res.text[5:-2])
-    tick_index = res.text.rfind('tick')
-    #print(res.text[index-1:-3])
-    data_string = '{'+res.text[tick_index-1:-2]
-    data = json.loads(data_string)
+    try:
+        res = r.get("https://tw.quote.finance.yahoo.net/quote/q?type=tick&perd=1m&mkt=10&sym=%23001")
+        #print(res.text[5:-2])
+        tick_index = res.text.rfind('tick')
+        #print(res.text[index-1:-3])
+        data_string = '{'+res.text[tick_index-1:-2]
+        data = json.loads(data_string)
+    except:
+        print('data format error')
     #print(len(data['tick']))
     #script_text = soup.find('tick').get_text()
     #print(soup.tick)
