@@ -28,21 +28,22 @@ def tx_crawler():
         #print(res.text[index-1:-3])
         data_string = '{'+res.text[tick_index-1:-2]
         data = json.loads(data_string)
+    
+        #print(len(data['tick']))
+        #script_text = soup.find('tick').get_text()
+        #print(soup.tick)
+        if(len(timestamp)<len(data['tick'])):
+            timestamp = [x['t'] for x in data['tick']]
+            price = [x['p'] for x in data['tick']]
+            volumn = [x['v'] for x in data['tick']]
+            jsonObject = {"timestamp": timestamp, "price": price, "volumn":volumn}
+            file = open(filepath, "w")
+            json.dump(jsonObject, file)
+            file.close()
+        else:
+            print('no update')
     except:
         print('data format error')
-    #print(len(data['tick']))
-    #script_text = soup.find('tick').get_text()
-    #print(soup.tick)
-    if(len(timestamp)<len(data['tick'])):
-        timestamp = [x['t'] for x in data['tick']]
-        price = [x['p'] for x in data['tick']]
-        volumn = [x['v'] for x in data['tick']]
-        jsonObject = {"timestamp": timestamp, "price": price, "volumn":volumn}
-        file = open(filepath, "w")
-        json.dump(jsonObject, file)
-        file.close()
-    else:
-        print('no update')
         
 
     time = datetime.now()  
