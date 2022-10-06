@@ -111,4 +111,4 @@ result = pd.DataFrame(get_list,columns=['id','name','category','收盤價','漲�
                                          '外資10買N天','外資20買N天'"自營商買賣超(張)","自營商買賣超%","自營商持股比例",\
                                          "主力買賣超(張)","主力今日%",'主力5買%','主力10買%','主力20買%','月增率%','年增率%','累計年增率%'])
 
-result.to_csv("/home/pineapple/Documents/stock/crawler/strategy/所有股票資訊.csv",encoding='utf_8_sig', index = False)
+result.to_csv("/home/pineapple/Documents/stock/crawler/strategy/stock_data/data/所有股票資訊.csv",encoding='utf_8_sig', index = False)
