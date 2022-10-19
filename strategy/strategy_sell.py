@@ -113,8 +113,17 @@ def earn_handle(stock_id):
     except:
         #return pd.Series(dtype='float64')
         return pd.Series(dtype='float64')
-
-
+def margin_handle(stock_id,day):
+    try:
+        df10 = margin.loc[stock_id]
+        df10['昨日融券'] = df10['融券差額(張)'].shift(1)
+        df10['融券5N']=(df10['融券差額(張)'].gt(0)).rolling(5,min_periods=1).sum()
+        df10['融券5N'] = df10['融券5N'].fillna(0).astype(int)
+        df10['融券增加'] = round((df10['融券差額(張)']-df10['昨日融券'])/df10['昨日融券']*100,2)
+        return df10.loc[day]
+    except:
+        return pd.Series(dtype='float64')
+margin = pd.read_pickle("/home/pineapple/Documents/stock/crawler/margin/融資融券.pkl")
 three = pd.read_pickle("/home/pineapple/Documents/stock/crawler/three/三大法人買賣超.pkl")
 volumn = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/成交股數.pkl")
 end = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/收盤價.pkl")
@@ -144,16 +153,18 @@ for stock_id in tqdm(three.index.levels[0]):
         df5 = start_price_handle(stock_id,str(today))
         df6 = high_price_handle(stock_id,str(today))
         df7 = volumn_handle(stock_id,str(today))
-        combine = pd.concat([df0,df1,df2,df3,df4,df5,df6,df7])
+        df10 = margin_handle(stock_id,str(today))
+        combine = pd.concat([df0,df1,df2,df3,df4,df5,df6,df7,df10])
+        combine['開盤位置']=round((combine['開盤價']-combine['昨日收盤價'])/combine['昨日收盤價']*100,2)
         combine['A轉跌幅']=round((combine['收盤價']-combine['最高價'])/combine['最高價']*100,2)
         get_list.append(combine)
     except:
         print('error: ',stock_id)
 #print()
-result = pd.DataFrame(get_list,columns=['id','name','category','昨日收盤價','昨日漲跌幅','收盤價','漲跌幅','A轉跌幅','成交量','三大買賣超','投信買賣超(張)','投信買賣超%','投信持股比例',\
+result = pd.DataFrame(get_list,columns=['id','name','category','昨日收盤價','昨日漲跌幅','開盤位置','開盤價','收盤價','漲跌幅','A轉跌幅','成交量','三大買賣超','投信買賣超(張)','投信買賣超%','投信持股比例',\
                                          "外資買賣超(張)","外資買賣超%","外資持股比例","自營商買賣超(張)","自營商買賣超%","自營商持股比例", "主力買賣超(張)","主力今日%",'投信5買%','投信10買%','投信20買%','投信5買N天','投信10買N天','投信20買N天',\
                                          "外資5買%","外資10買%","外資20買%",'外資5買N天','外資10買N天','外資20買N天',\
                                          '主力5買%','主力10買%','主力20買%','月增率%','年增率%','累計年增率%',\
-                                         'ma5距離','ma10距離','ma20距離','ma60距離'])
+                                         'ma5距離','ma10距離','ma20距離','ma60距離','融券5N','昨日融券','融券差額(張)','融券增加'])
 
 result.to_csv("/home/pineapple/Documents/stock/crawler/strategy/stock_data/data/所有股票資訊_sell.csv",encoding='utf_8_sig', index = False)
