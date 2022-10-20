@@ -115,12 +115,13 @@ def earn_handle(stock_id):
         return pd.Series(dtype='float64')
 def margin_handle(stock_id,day):
     try:
-        df10 = margin.loc[stock_id]
-        df10['昨日融券'] = df10['融券差額(張)'].shift(1)
-        df10['融券5N']=(df10['融券差額(張)'].gt(0)).rolling(5,min_periods=1).sum()
-        df10['融券5N'] = df10['融券5N'].fillna(0).astype(int)
-        df10['融券增加'] = round((df10['融券差額(張)']-df10['昨日融券'])/df10['昨日融券']*100,2)
-        return df10.loc[day]
+        if(df10['融券差額(張)']>0):
+            df10 = margin.loc[stock_id]
+            df10['昨日融券'] = df10['融券差額(張)'].shift(1)
+            df10['融券5N']=(df10['融券差額(張)'].gt(0)).rolling(5,min_periods=1).sum()
+            df10['融券5N'] = df10['融券5N'].fillna(0).astype(int)
+            df10['融券增加'] = round((df10['融券差額(張)']-df10['昨日融券'])/df10['昨日融券'],2)
+            return df10.loc[day]
     except:
         return pd.Series(dtype='float64')
 margin = pd.read_pickle("/home/pineapple/Documents/stock/crawler/margin/融資融券.pkl")
@@ -141,7 +142,7 @@ lastMonth = first - timedelta(days=1)
 lastMonth_str=lastMonth.strftime("%Y/%m")
 
 get_list = []
-#yesterday = '2022-08-26'
+#yesterday = '2022-10-17'
 for stock_id in tqdm(three.index.levels[0]):
     try:
         df0 = end_price_handle(stock_id,str(today))
