@@ -1,9 +1,8 @@
 import json
-from tqdm import tqdm
 import os
 
 with os.scandir('/home/pineapple/Documents/stock/crawler/flat_viewer/json/') as it:
-    for entry in tqdm(it):
+    for entry in it:
         if entry.name.endswith(".json") and entry.is_file():
             with open(entry.path) as f:
                 data = json.load(f)

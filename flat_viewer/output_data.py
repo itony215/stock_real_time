@@ -5,7 +5,6 @@ from io import StringIO
 import pandas as pd
 import json
 from bs4 import BeautifulSoup
-from tqdm import tqdm
 from datetime import datetime
 import os
 from pandas import Timestamp
@@ -26,7 +25,7 @@ three=three.fillna(0)
 margin=margin.fillna(0)
 
 today = datetime.today()
-for i in tqdm(start.columns):
+for i in start.columns:
     result=[]
     date=[]
     startday_str = '01/4/21 8:00:00'
