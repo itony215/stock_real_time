@@ -47,7 +47,7 @@ for i in start.columns:
             lastupdate = datetime.strptime(lastupdate_str, '%Y-%m-%d %H:%M:%S')
             lastupdate_ymd = data['date'][-1]
 
-            while lastupdate < today:
+            while lastupdate < start.index[-1]:
                 try:
                     timestr = float(lastupdate.timestamp())*1000
                     lastupdate_ymd = lastupdate.strftime("%Y-%m-%d")
