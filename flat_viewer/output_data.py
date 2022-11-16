@@ -25,7 +25,7 @@ three=three.fillna(0)
 margin=margin.fillna(0)
 
 today = datetime.today()
-for i in start.columns:
+for i in start.columns:  #['2201']:
     result=[]
     date=[]
     startday_str = '01/4/21 8:00:00'
@@ -45,12 +45,17 @@ for i in start.columns:
             data = json.load(f)
             lastupdate_str = data['date'][-1]+ ' 8:00:00'
             lastupdate = datetime.strptime(lastupdate_str, '%Y-%m-%d %H:%M:%S')
-            lastupdate_ymd = data['date'][-1]
-
-            while lastupdate < start.index[-1]:
+            lastupdate = lastupdate + timedelta(days=1)
+            #lastupdate_ymd = data['date'][-1]
+            lastupdate_ymd = lastupdate.strftime("%Y-%m-%d")
+            #print('lastupdate',lastupdate)
+            #print(lastupdate<start.index[-1]+ timedelta(days=1))
+            #print(start.index[-1]+ timedelta(days=1))
+            while lastupdate < (start.index[-1]+ timedelta(days=1)):
+                print('go')
                 try:
                     timestr = float(lastupdate.timestamp())*1000
-                    lastupdate_ymd = lastupdate.strftime("%Y-%m-%d")
+                    
 
                     if((i,lastupdate_ymd) in margin.index):
                         mar=margin.loc[i].loc[lastupdate_ymd]['融券差額(張)']
@@ -71,7 +76,7 @@ for i in start.columns:
                         #date.append(lastupdate_ymd)
                 except:
                     pass
-                lastupdate = lastupdate + timedelta(days=1)
+                
                 #print(data['date'])
 
             f.seek(0) 
