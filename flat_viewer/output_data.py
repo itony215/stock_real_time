@@ -52,7 +52,7 @@ for i in start.columns:  #['2201']:
             #print(lastupdate<start.index[-1]+ timedelta(days=1))
             #print(start.index[-1]+ timedelta(days=1))
             while lastupdate < (start.index[-1]+ timedelta(days=1)):
-                print('go')
+                # print('go')
                 try:
                     timestr = float(lastupdate.timestamp())*1000
                     
@@ -76,7 +76,7 @@ for i in start.columns:  #['2201']:
                         #date.append(lastupdate_ymd)
                 except:
                     pass
-                
+                lastupdate = lastupdate + timedelta(days=1)
                 #print(data['date'])
 
             f.seek(0) 
