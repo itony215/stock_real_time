@@ -25,7 +25,7 @@ three=three.fillna(0)
 margin=margin.fillna(0)
 
 today = datetime.today()
-for i in ['1101']:  #start.columns:
+for i in start.columns:  #['1101']:
     result=[]
     date=[]
     startday_str = '01/4/21 8:00:00'
