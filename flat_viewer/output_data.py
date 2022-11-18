@@ -25,7 +25,7 @@ three=three.fillna(0)
 margin=margin.fillna(0)
 
 today = datetime.today()
-for i in start.columns:  #['1101']:
+for i in ['1101']:  #start.columns:
     result=[]
     date=[]
     startday_str = '01/4/21 8:00:00'
@@ -52,35 +52,53 @@ for i in start.columns:  #['1101']:
             #print(lastupdate<start.index[-1]+ timedelta(days=1))
             # print(start.index[-1])
             while lastupdate < (start.index[-1]+ timedelta(days=1)): #start.index[-1]+ timedelta(days=1)
-                # print('go')
+                print('go')
                 try:
-                    timestr = float(lastupdate.timestamp())*1000
-                    if((i,lastupdate_ymd) in margin.index):
-                        mar=margin.loc[i].loc[lastupdate_ymd]['融券差額(張)']
-                    else:
-                        mar=0
+                    
+                    
+                    timestr = float(start.index[-1].timestamp())*1000
 
-                    if((i,lastupdate_ymd) in three.index):
-                        thr=three.loc[i].loc[lastupdate_ymd]['投信買賣超(張)']
-                    else:
-                        thr=0
+                    print(data['stock_data'][-1][0]==timestr)
                     if(data['stock_data'][-1][0]==timestr):
-                        # print('update mar')
+                        print('update mar')
+                        if((i,lastupdate_ymd) in margin.index):
+                            mar=margin.loc[i].loc[lastupdate_ymd]['融券差額(張)']
+                        else:
+                            mar=0
+
+                        if((i,lastupdate_ymd) in three.index):
+                            thr=three.loc[i].loc[lastupdate_ymd]['投信買賣超(張)']
+                        else:
+                            thr=0
                         data['stock_data'][-1][6] = thr 
                         data['stock_data'][-1][7] = mar
+                        lastupdate = lastupdate + timedelta(days=1)
                     else:
+                        print('new')
+                        lastupdate = lastupdate + timedelta(days=1)
+                        lastupdate_str = float(lastupdate.timestamp())*1000
+                        lastupdate_ymd = lastupdate.strftime("%Y-%m-%d")
+                        if((i,lastupdate_ymd) in margin.index):
+                            mar=margin.loc[i].loc[lastupdate_ymd]['融券差額(張)']
+                        else:
+                            mar=0
+
+                        if((i,lastupdate_ymd) in three.index):
+                            thr=three.loc[i].loc[lastupdate_ymd]['投信買賣超(張)']
+                        else:
+                            thr=0
+                        print(lastupdate)
+                        print(lastupdate_str)
+                        print(lastupdate_ymd)
                         data['stock_data'].append(
-                            [timestr,start[i][lastupdate_ymd],high[i][lastupdate_ymd],low[i][lastupdate_ymd],end[i][lastupdate_ymd],
+                            [lastupdate_str,start[i][lastupdate_ymd],high[i][lastupdate_ymd],low[i][lastupdate_ymd],end[i][lastupdate_ymd],
                             round(volumn[i][lastupdate_ymd]/1000,2),thr,mar,
                             df0.loc[lastupdate_ymd]['ma5'],df0.loc[lastupdate_ymd]['ma10'],df0.loc[lastupdate_ymd]['ma20'],df0.loc[lastupdate_ymd]['ma60']
                             ])
                         data['date'].append(lastupdate_ymd)
-
-                        #date.append(lastupdate_ymd)
                 except:
-                    #print('error: ', i)
+                    print('error: ', i)
                     pass
-                lastupdate = lastupdate + timedelta(days=1)
                 #print(data['date'])
 
             f.seek(0) 
