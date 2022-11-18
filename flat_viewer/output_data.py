@@ -25,7 +25,7 @@ three=three.fillna(0)
 margin=margin.fillna(0)
 
 today = datetime.today()
-for i in start.columns:  #['2201']:
+for i in start.columns:  #['1101']:
     result=[]
     date=[]
     startday_str = '01/4/21 8:00:00'
@@ -45,18 +45,16 @@ for i in start.columns:  #['2201']:
             data = json.load(f)
             lastupdate_str = data['date'][-1]+ ' 8:00:00'
             lastupdate = datetime.strptime(lastupdate_str, '%Y-%m-%d %H:%M:%S')
-            lastupdate = lastupdate + timedelta(days=1)
+            #lastupdate = lastupdate + timedelta(days=1)
             #lastupdate_ymd = data['date'][-1]
             lastupdate_ymd = lastupdate.strftime("%Y-%m-%d")
-            #print('lastupdate',lastupdate)
+            # print('lastupdate',lastupdate)
             #print(lastupdate<start.index[-1]+ timedelta(days=1))
-            #print(start.index[-1]+ timedelta(days=1))
-            while lastupdate < (start.index[-1]+ timedelta(days=1)):
+            # print(start.index[-1])
+            while lastupdate < (start.index[-1]+ timedelta(days=1)): #start.index[-1]+ timedelta(days=1)
                 # print('go')
                 try:
                     timestr = float(lastupdate.timestamp())*1000
-                    
-
                     if((i,lastupdate_ymd) in margin.index):
                         mar=margin.loc[i].loc[lastupdate_ymd]['融券差額(張)']
                     else:
@@ -66,15 +64,21 @@ for i in start.columns:  #['2201']:
                         thr=three.loc[i].loc[lastupdate_ymd]['投信買賣超(張)']
                     else:
                         thr=0
+                    if(data['stock_data'][-1][0]==timestr):
+                        # print('update mar')
+                        data['stock_data'][-1][6] = thr 
+                        data['stock_data'][-1][7] = mar
+                    else:
+                        data['stock_data'].append(
+                            [timestr,start[i][lastupdate_ymd],high[i][lastupdate_ymd],low[i][lastupdate_ymd],end[i][lastupdate_ymd],
+                            round(volumn[i][lastupdate_ymd]/1000,2),thr,mar,
+                            df0.loc[lastupdate_ymd]['ma5'],df0.loc[lastupdate_ymd]['ma10'],df0.loc[lastupdate_ymd]['ma20'],df0.loc[lastupdate_ymd]['ma60']
+                            ])
+                        data['date'].append(lastupdate_ymd)
 
-                    data['stock_data'].append(
-                        [timestr,start[i][lastupdate_ymd],high[i][lastupdate_ymd],low[i][lastupdate_ymd],end[i][lastupdate_ymd],
-                         round(volumn[i][lastupdate_ymd]/1000,2),thr,mar,
-                        df0.loc[lastupdate_ymd]['ma5'],df0.loc[lastupdate_ymd]['ma10'],df0.loc[lastupdate_ymd]['ma20'],df0.loc[lastupdate_ymd]['ma60']
-                        ])
-                    data['date'].append(lastupdate_ymd)
                         #date.append(lastupdate_ymd)
                 except:
+                    #print('error: ', i)
                     pass
                 lastupdate = lastupdate + timedelta(days=1)
                 #print(data['date'])
@@ -83,7 +87,7 @@ for i in start.columns:  #['2201']:
             json.dump(data, f,indent=2)
             f.truncate() 
     else:
-        print(i)
+        #print(i)
         while startday < today:
             try:
                 timestr = float(startday.timestamp())*1000
@@ -106,6 +110,7 @@ for i in start.columns:  #['2201']:
                     ])
                 date.append(startday_ymd)
             except:
+                #print('error: ', i)
                 pass
 
 
