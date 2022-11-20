@@ -52,15 +52,15 @@ for i in start.columns:  #['1101']:
             #print(lastupdate<start.index[-1]+ timedelta(days=1))
             # print(start.index[-1])
             while lastupdate < (start.index[-1]+ timedelta(days=1)): #start.index[-1]+ timedelta(days=1)
-                print('go')
+                #print('go')
                 try:
                     
                     
                     timestr = float(start.index[-1].timestamp())*1000
 
-                    print(data['stock_data'][-1][0]==timestr)
+                    #print(data['stock_data'][-1][0]==timestr)
                     if(data['stock_data'][-1][0]==timestr):
-                        print('update mar')
+                        #print('update mar')
                         if((i,lastupdate_ymd) in margin.index):
                             mar=margin.loc[i].loc[lastupdate_ymd]['融券差額(張)']
                         else:
@@ -74,7 +74,7 @@ for i in start.columns:  #['1101']:
                         data['stock_data'][-1][7] = mar
                         lastupdate = lastupdate + timedelta(days=1)
                     else:
-                        print('new')
+                        #print('new')
                         lastupdate = lastupdate + timedelta(days=1)
                         lastupdate_str = float(lastupdate.timestamp())*1000
                         lastupdate_ymd = lastupdate.strftime("%Y-%m-%d")
@@ -87,9 +87,9 @@ for i in start.columns:  #['1101']:
                             thr=three.loc[i].loc[lastupdate_ymd]['投信買賣超(張)']
                         else:
                             thr=0
-                        print(lastupdate)
-                        print(lastupdate_str)
-                        print(lastupdate_ymd)
+                        #print(lastupdate)
+                        #print(lastupdate_str)
+                        #print(lastupdate_ymd)
                         data['stock_data'].append(
                             [lastupdate_str,start[i][lastupdate_ymd],high[i][lastupdate_ymd],low[i][lastupdate_ymd],end[i][lastupdate_ymd],
                             round(volumn[i][lastupdate_ymd]/1000,2),thr,mar,
