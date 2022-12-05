@@ -45,19 +45,20 @@ for stock_id in tqdm(earn.index.levels[0]):
             new_df = new_df.drop(new_df.index[0])
             #date = transform_ym(new_df.iloc[0]['年/月'])
             #print(stock_id)
+            new_df = new_df.fillna(0)
             last_update = earn.loc[stock_id].iloc[-1].name
             for i in range(len(new_df)):
                 date = transform_ym(new_df.iloc[i]['年/月'])
                 if(last_update<=date):
                     #print('ok')
                     
-                    earn.loc[(stock_id,date),'營收(千)'] = new_df.iloc[i,1]
-                    earn.loc[(stock_id,date),'月增率%'] = str(new_df.iloc[i,2]).replace('%','')
-                    earn.loc[(stock_id,date),'去年同期(千)'] = new_df.iloc[i,3]
-                    earn.loc[(stock_id,date),'年增率%'] = str(new_df.iloc[i,4]).replace('%','')
-                    earn.loc[(stock_id,date),'累計營收(千)'] = new_df.iloc[i,5]
-                    earn.loc[(stock_id,date),'累計年增率%'] = str(new_df.iloc[i,6]).replace('%','')
-            if(earn.loc[stock_id].iloc[-1].name<=transform_ym(new_df.iloc[0]['年/月'])):
+                    earn.loc[(stock_id,date),'營收(千)'] = new_df.iloc[i,1] if new_df.iloc[i,1] != 0 else 0
+                    earn.loc[(stock_id,date),'月增率%'] = new_df.iloc[i,2].replace('%','') if new_df.iloc[i,2] != 0 else 0
+                    earn.loc[(stock_id,date),'去年同期(千)'] = new_df.iloc[i,3] if new_df.iloc[i,3] != 0 else 0
+                    earn.loc[(stock_id,date),'年增率%'] = new_df.iloc[i,4].replace('%','') if new_df.iloc[i,4] != 0 else 0
+                    earn.loc[(stock_id,date),'累計營收(千)'] = new_df.iloc[i,5] if new_df.iloc[i,5] != 0 else 0
+                    earn.loc[(stock_id,date),'累計年增率%'] = new_df.iloc[i,6].replace('%','') if new_df.iloc[i,6] != 0 else 0
+            if(earn.loc[stock_id].iloc[-1].name<transform_ym(new_df.iloc[0]['年/月'])):
                 if(float(earn.loc[stock_id].iloc[-1]['月增率%'])<float(new_df.iloc[0,2].replace('%',''))\
                         and float(earn.loc[stock_id].iloc[-1]['年增率%'])<float(new_df.iloc[0,4].replace('%',''))\
                         and float(earn.loc[stock_id].iloc[-1]['累計年增率%'])<float(new_df.iloc[0,6].replace('%',''))):

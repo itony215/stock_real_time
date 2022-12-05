@@ -10,7 +10,7 @@ from datetime import datetime
 eps = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/eps.pkl")
 
 for stock_id in eps.columns:
-    print(stock_id)
+    #print(stock_id)
     last_update = eps[stock_id].index[-1]
     r = requests.get('https://concords.moneydj.com/z/zc/zcd/zcd_'+stock_id+'.djhtm')
     soup = BeautifulSoup(r.text, 'html.parser')
@@ -23,11 +23,11 @@ for stock_id in eps.columns:
     
     for i in range(len(new_df)):
         if(last_update<=new_df.iloc[i]['季別']):
-            print('true')
+            #print('true')
             season = new_df.iloc[i]['季別']
             eps.loc[season,stock_id] = new_df.iloc[i]['稅後每股盈餘(元)']
         else:
-            print('false')
+            #print('false')
             break
 eps = eps.sort_index()
 eps.to_pickle("/home/pineapple/Documents/stock/crawler/history/eps.pkl")
