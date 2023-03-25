@@ -26,7 +26,9 @@ lowPrice={}
 endPrice={}
 volumnPart={}
 countPart={}
-#datestr = '20220722'
+#datestr = '20230220'
+#day = '2023/02/20'
+#df_time=pd.Timestamp(day)
 #上市
 r = requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + datestr + '&type=ALL')
 if datestr in r.headers["Content-disposition"] and len(r.text)>0:
@@ -67,44 +69,44 @@ if transform_date(json_data['reportDate']) == day and len(r.text)>0:
             print('error 2:', j)
             continue
         
-start_new = pd.DataFrame([startPrice], index = [df_time])
-start_merge = pd.concat([start,start_new])
-start_merge.index.name = 'date'
-start_merge.columns.name= 'stock_id'
-start_merge = start_merge[~start_merge.index.duplicated(keep='last')]
-start_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/開盤價.pkl")
+    start_new = pd.DataFrame([startPrice], index = [df_time])
+    start_merge = pd.concat([start,start_new])
+    start_merge.index.name = 'date'
+    start_merge.columns.name= 'stock_id'
+    start_merge = start_merge[~start_merge.index.duplicated(keep='last')]
+    start_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/開盤價.pkl")
 
-high_new = pd.DataFrame([highPrice], index = [df_time])
-high_merge = pd.concat([high,high_new])
-high_merge.index.name = 'date'
-high_merge.columns.name= 'stock_id'
-high_merge = high_merge[~high_merge.index.duplicated(keep='last')]
-high_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/最高價.pkl")
+    high_new = pd.DataFrame([highPrice], index = [df_time])
+    high_merge = pd.concat([high,high_new])
+    high_merge.index.name = 'date'
+    high_merge.columns.name= 'stock_id'
+    high_merge = high_merge[~high_merge.index.duplicated(keep='last')]
+    high_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/最高價.pkl")
 
-low_new = pd.DataFrame([lowPrice], index = [df_time])
-low_merge = pd.concat([low,low_new])
-low_merge.index.name = 'date'
-low_merge.columns.name= 'stock_id'
-low_merge = low_merge[~low_merge.index.duplicated(keep='last')]
-low_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/最低價.pkl")
+    low_new = pd.DataFrame([lowPrice], index = [df_time])
+    low_merge = pd.concat([low,low_new])
+    low_merge.index.name = 'date'
+    low_merge.columns.name= 'stock_id'
+    low_merge = low_merge[~low_merge.index.duplicated(keep='last')]
+    low_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/最低價.pkl")
 
-end_new = pd.DataFrame([endPrice], index = [df_time])
-end_merge = pd.concat([end,end_new])
-end_merge.index.name = 'date'
-end_merge.columns.name= 'stock_id'
-end_merge = end_merge[~end_merge.index.duplicated(keep='last')]
-end_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/收盤價.pkl")
+    end_new = pd.DataFrame([endPrice], index = [df_time])
+    end_merge = pd.concat([end,end_new])
+    end_merge.index.name = 'date'
+    end_merge.columns.name= 'stock_id'
+    end_merge = end_merge[~end_merge.index.duplicated(keep='last')]
+    end_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/收盤價.pkl")
 
-volumn_new = pd.DataFrame([volumnPart], index = [df_time])
-volumn_merge = pd.concat([volumn,volumn_new])
-volumn_merge.index.name = 'date'
-volumn_merge.columns.name= 'stock_id'
-volumn_merge = volumn_merge[~volumn_merge.index.duplicated(keep='last')]
-volumn_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/成交股數.pkl")
+    volumn_new = pd.DataFrame([volumnPart], index = [df_time])
+    volumn_merge = pd.concat([volumn,volumn_new])
+    volumn_merge.index.name = 'date'
+    volumn_merge.columns.name= 'stock_id'
+    volumn_merge = volumn_merge[~volumn_merge.index.duplicated(keep='last')]
+    volumn_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/成交股數.pkl")
 
-count_new = pd.DataFrame([countPart], index = [df_time])
-count_merge = pd.concat([count,count_new])
-count_merge.index.name = 'date'
-count_merge.columns.name= 'stock_id'
-count_merge = count_merge[~count_merge.index.duplicated(keep='last')]
-count_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/成交筆數.pkl")
+    count_new = pd.DataFrame([countPart], index = [df_time])
+    count_merge = pd.concat([count,count_new])
+    count_merge.index.name = 'date'
+    count_merge.columns.name= 'stock_id'
+    count_merge = count_merge[~count_merge.index.duplicated(keep='last')]
+    count_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/成交筆數.pkl")
