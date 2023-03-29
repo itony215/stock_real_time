@@ -11,15 +11,18 @@ import os
 def transform_ym(date):   #民國轉西元
         y, m, d = date.split('/')
         return str(int(y)+1911) + '-' + m + '-' + d
-
+stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
 three = pd.read_pickle("/home/pineapple/Documents/stock/crawler/three/三大法人買賣超.pkl")
 stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_total_release.pkl")
 today = date.today()
 #day = today.strftime("%m/%d")
 #datestr = today.strftime("%Y-%m-%d")
 #datestr = '2022-08-11'
-for stock_id in tqdm(three.index.levels[0]):
-    old_date = three.loc[stock_id].iloc[-1].name.strftime("%Y-%m-%d")
+for stock_id in tqdm(stock_list.index):
+    if(stock_id in three.index.levels[0]):
+        old_date = three.loc[stock_id].iloc[-1].name.strftime("%Y-%m-%d")
+    else:
+        old_date = str(today)
     if(old_date<=str(today) or three.loc[(stock_id,old_date)].isna().any()):
         #print(stock_id)
         try:
@@ -41,8 +44,8 @@ for stock_id in tqdm(three.index.levels[0]):
                     print('no new data 投信',stock_id,i)
                     pass
                 try:
-                    print('old_date',old_date)
-                    print('date', date)
+                    #print('old_date',old_date)
+                    #print('date', date)
                     if(old_date<=date):
                         
                         if(three.loc[(stock_id,date)].isna().any()):
