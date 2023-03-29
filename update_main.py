@@ -12,7 +12,7 @@ import numpy
 def transform_ym(date):   #民國轉西元
         y, m, d = date.split('/')
         return str(int(y)+1911) + '-' + m + '-' + d
-
+stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
 main = pd.read_pickle("/home/pineapple/Documents/stock/crawler/main/主力買賣超.pkl")
 stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_total_release.pkl")
 today = date.today()
@@ -20,11 +20,14 @@ day = datetime.timedelta(days=1)
 #day = today.strftime("%m/%d")
 #datestr = today.strftime("%Y-%m-%d")
 #datestr = '2022-08-11'
-for stock_id in tqdm(main.index.levels[0]):
-    old_date = main.loc[stock_id].iloc[-1].name
-    
+for stock_id in tqdm(stock_list.index):
+    if(stock_id in main.index.levels[0]):
+        old_date = main.loc[stock_id].iloc[-1].name
+        day1 = old_date + day
+    else:
+        day1 = today
     #print(old_total_data)
-    day1 = old_date + day
+    
     while day1 <= today:
         daystr = day1.strftime('%Y-%m-%d')
         print(daystr,stock_id)

@@ -4,13 +4,13 @@ from datetime import date
 import pandas as pd
 from bs4 import BeautifulSoup
 import datetime
-
+from tqdm import tqdm
 def transform_ym(date):   #民國轉西元
         y, m, d = date.split('/')
         return str(int(y)+1911) + '-' + m + '-' + d
 
-
-margin = pd.read_pickle("./history/融資融券.pkl")
+stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
+margin = pd.read_pickle("/home/pineapple/Documents/stock/crawler/margin/融資融券.pkl")
 
 day = datetime.timedelta(days=1)
 today = date.today()
@@ -18,8 +18,13 @@ today = date.today()
 
 
 #datestr = '2022-08-08'
-for stock_id in margin.index.levels[0]:
-    datestr = margin.loc[stock_id].iloc[-1].name.strftime("%Y-%m-%d")
+for stock_id in tqdm(stock_list.index):
+    if(stock_id in margin.index.levels[0]):
+        #print(stock_id)
+        datestr = margin.loc[stock_id].iloc[-1].name.strftime("%Y-%m-%d")
+    else:
+        datestr = '2023-03-28'
+        #print('eeeeeeeerrr',stock_id)
     if(datestr<str(today)):
         #print(stock_id)
         try:
@@ -43,4 +48,4 @@ for stock_id in margin.index.levels[0]:
 #     else:
 #         print('no update')
 margin = margin.sort_index()
-margin.to_pickle("/home/pineapple/Documents/stock/crawler/history/融資融券.pkl")
+margin.to_pickle("/home/pineapple/Documents/stock/crawler/margin/融資融券.pkl")

@@ -19,6 +19,13 @@ def three_handle(stock_id,day):
         df['投信20買N天'] =(df['投信買賣超(張)'].gt(0)).rolling(20,min_periods=1).sum()
         df['投信20買N天'] = df['投信20買N天'].fillna(0).astype(int)
 
+        df['投信5賣N天'] =(df['投信買賣超(張)'].lt(0)).rolling(5,min_periods=1).sum()
+        df['投信5賣N天'] = df['投信5賣N天'].fillna(0).astype(int)
+        df['投信10賣N天'] =(df['投信買賣超(張)'].lt(0)).rolling(10,min_periods=1).sum()
+        df['投信10賣N天'] = df['投信10賣N天'].fillna(0).astype(int)
+        df['投信20賣N天'] =(df['投信買賣超(張)'].lt(0)).rolling(20,min_periods=1).sum()
+        df['投信20賣N天'] = df['投信20賣N天'].fillna(0).astype(int)
+
         df['投信5買%'] =round(df['投信買賣超%'].rolling(5,min_periods=1).sum(),2)
         df['投信5買%'] = df['投信5買%'].fillna(0).astype(float)
         df['投信10買%'] =round(df['投信買賣超%'].rolling(10,min_periods=1).sum(),2)
@@ -53,8 +60,8 @@ def main_handle(stock_id,day):
         df2['主力20買%'] = df2['主力20買%'].fillna(0).astype(float)
         return df2.loc[day]
     except:
-        #return pd.Series(dtype='float64')
-        return pd.Series()
+        return pd.Series(dtype='float64')
+        #return pd.Series()
 
 def price_handle(stock_id,day):
     try:
@@ -82,7 +89,7 @@ three = pd.read_pickle("/home/pineapple/Documents/stock/crawler/three/三大法�
 end = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/收盤價.pkl")
 main = pd.read_pickle("/home/pineapple/Documents/stock/crawler/main/主力買賣超.pkl")
 earn = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/營收.pkl")
-stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
+stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
 
 today = date.today()
 yesterday = today - timedelta(days=1)
@@ -91,7 +98,7 @@ lastMonth = first - timedelta(days=1)
 lastMonth_str=lastMonth.strftime("%Y/%m")
 
 get_list = []
-#yesterday = '2022-08-26'
+#today = '2023-03-28'
 for stock_id in tqdm(three.index.levels[0]):
     try:
         df0 = price_handle(stock_id,str(today))
@@ -109,6 +116,7 @@ result = pd.DataFrame(get_list,columns=['id','name','category','收盤價','漲�
                                          '投信5買%','投信10買%','投信20買%','投信5買N天','投信10買N天','投信20買N天',\
                                          "外資持股比例","外資買賣超(張)","外資買賣超%","外資5買%","外資10買%","外資20買%",'外資5買N天',\
                                          '外資10買N天','外資20買N天'"自營商買賣超(張)","自營商買賣超%","自營商持股比例",\
-                                         "主力買賣超(張)","主力今日%",'主力5買%','主力10買%','主力20買%','月增率%','年增率%','累計年增率%'])
+                                         "主力買賣超(張)","主力今日%",'主力5買%','主力10買%','主力20買%','月增率%','年增率%','累計年增率%',\
+                                         "投信5賣N天","投信10賣N天","投信20賣N天"])
 
 result.to_csv("/home/pineapple/Documents/stock/crawler/strategy/stock_data/data/所有股票資訊.csv",encoding='utf_8_sig', index = False)

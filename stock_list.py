@@ -62,7 +62,7 @@ for i in stock_list_df.index:
     except:
         print('error', i)
         
-#stock_list_old.index.name = 'stock_id'
 
-
-stock_list_df.to_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
+#stock_list_old.columns = ["name","category"]
+#stock_list_old.set_index(keys ="stock_id",inplace=True)
+stock_list_old.to_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")

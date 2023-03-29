@@ -14,12 +14,12 @@ from datetime import date
 today = date.today()
 day = today.strftime("%m/%d")
 datestr = today.strftime("%Y%m%d")
-stock_list_df = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
-#datestr = "20220811"
-#day = "08/11"
+stock_list_df = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
+#datestr = "2023016"
+#day = "02/16"
 result = []
 for s in stock_list_df.index:
-    print(s)
+    #print(s)
     r = requests.get('https://concords.moneydj.com/z/zc/zco/zco.djhtm?a='+str(s)+'&e='+datestr+'&f='+datestr)
     soup = BeautifulSoup(r.text, 'html.parser')
     data = soup.find_all("td", class_ = ["t4t1","t3n1"])
