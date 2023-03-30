@@ -12,7 +12,7 @@ import os.path as path
 import json
 from tqdm import tqdm
 
-stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
+stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
 
 for i in tqdm(stock_list.index):
     try:

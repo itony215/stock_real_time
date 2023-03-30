@@ -17,9 +17,9 @@ main = pd.read_pickle("/home/pineapple/Documents/stock/crawler/main/主力買賣
 stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_total_release.pkl")
 today = date.today()
 day = datetime.timedelta(days=1)
-#day = today.strftime("%m/%d")
-#datestr = today.strftime("%Y-%m-%d")
-#datestr = '2022-08-11'
+
+#datestr = '2023-03-29'
+#today = datetime.datetime.strptime(datestr, '%Y-%m-%d')
 for stock_id in tqdm(stock_list.index):
     if(stock_id in main.index.levels[0]):
         old_date = main.loc[stock_id].iloc[-1].name
@@ -27,14 +27,20 @@ for stock_id in tqdm(stock_list.index):
     else:
         day1 = today
     #print(old_total_data)
-    
+    error_time = 0
     while day1 <= today:
+        if(error_time>4):
+            break
         daystr = day1.strftime('%Y-%m-%d')
-        print(daystr,stock_id)
-        if numpy.isnan(main.loc[stock_id].iloc[-1]['主力持股(張)']):
-            old_total_data = 0
+        #print(daystr,stock_id)
+        #print(main.loc[stock_id].iloc[-1]['主力持股(張)'])
+        if(stock_id in main.index.levels[0]):
+            if numpy.isnan(main.loc[stock_id].iloc[-1]['主力持股(張)']):# error
+                old_total_data = 0
+            else:
+                old_total_data = int(main.loc[stock_id].iloc[-1]['主力持股(張)'])
         else:
-            old_total_data = int(main.loc[stock_id].iloc[-1]['主力持股(張)'])
+            old_total_data = 0
     #if(old_date<str(today)):
         #print(stock_id)
         try:
@@ -49,8 +55,10 @@ for stock_id in tqdm(stock_list.index):
             main.loc[(stock_id,daystr),'主力今日%'] = round(new_data/total_release*100,2)
             main.loc[(stock_id,daystr),'主力持有%'] = round((old_total_data+new_data)/total_release*100,2)
             print('update: ',new_data,old_total_data+new_data,round(new_data/total_release*100,2),round((old_total_data+new_data)/total_release*100,2))
+            error_time = 0
         except:
             print('Error: ', stock_id)
+            error_time = error_time+1
             pass
         day1 = day1 + day
 #     else:

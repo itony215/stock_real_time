@@ -81,8 +81,9 @@ three = pd.read_pickle("/home/pineapple/Documents/stock/crawler/three/三大法�
 end = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/收盤價.pkl")
 main = pd.read_pickle("/home/pineapple/Documents/stock/crawler/main/主力買賣超.pkl")
 earn = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/營收.pkl")
-stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
+stock_list = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
 good_earn_list = pd.read_csv("/home/pineapple/Documents/stock/crawler/strategy/good_earn_list.csv")
+bad_earn_list = pd.read_csv("/home/pineapple/Documents/stock/crawler/strategy/bad_earn_list.csv")
 
 today = date.today()
 yesterday = today - timedelta(days=1)
@@ -91,7 +92,8 @@ lastMonth = first - timedelta(days=1)
 lastMonth_str=lastMonth.strftime("%Y/%m")
 
 get_list = []
-#yesterday = '2022-08-26'
+get_list_2 = []
+#today = '2023-01-06'
 # for stock_id in tqdm(three.index.levels[0]):
 #     print(type(stock_id))
 for i in (good_earn_list.index):
@@ -108,6 +110,20 @@ for i in (good_earn_list.index):
         get_list.append(combine)
     except:
         print('error: ',stock_id)
+for i2 in (bad_earn_list.index):
+    stock_id = str(bad_earn_list.iloc[i2].values[0])
+    #print(type(stock_id))
+    try:
+        df0 = price_handle(stock_id,str(today))
+        df1 = three_handle(stock_id,str(today))
+        df2 = main_handle(stock_id,str(today))
+        df3 = earn_handle(stock_id)
+        df4 = stock_list.loc[stock_id]
+        df4['id'] = str(df4.name)
+        combine = pd.concat([df0,df1,df2,df3,df4])
+        get_list_2.append(combine)
+    except:
+        print('error: ',stock_id)
 #print()
 result = pd.DataFrame(get_list,columns=['id','name','category','收盤價','漲跌幅','投信持股比例','投信買賣超%','投信買賣超(張)',\
                                          '投信5買%','投信10買%','投信20買%','投信5買N天','投信10買N天','投信20買N天',\
@@ -116,3 +132,11 @@ result = pd.DataFrame(get_list,columns=['id','name','category','收盤價','漲�
                                          "主力買賣超(張)","主力今日%",'主力5買%','主力10買%','主力20買%','月增率%','年增率%','累計年增率%'])
 
 result.to_csv("/home/pineapple/Documents/stock/crawler/strategy/stock_data/data/年月營收增.csv",encoding='utf_8_sig', index = False)
+
+result2 = pd.DataFrame(get_list_2,columns=['id','name','category','收盤價','漲跌幅','投信持股比例','投信買賣超%','投信買賣超(張)',\
+                                         '投信5買%','投信10買%','投信20買%','投信5買N天','投信10買N天','投信20買N天',\
+                                         "外資持股比例","外資買賣超(張)","外資買賣超%","外資5買%","外資10買%","外資20買%",'外資5買N天',\
+                                         '外資10買N天','外資20買N天'"自營商買賣超(張)","自營商買賣超%","自營商持股比例",\
+                                         "主力買賣超(張)","主力今日%",'主力5買%','主力10買%','主力20買%','月增率%','年增率%','累計年增率%'])
+
+result2.to_csv("/home/pineapple/Documents/stock/crawler/strategy/stock_data/data/年月營收減.csv",encoding='utf_8_sig', index = False)

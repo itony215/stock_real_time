@@ -6,7 +6,7 @@ import time
 from tqdm import tqdm
 
 
-stock_list_df = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_list.pkl")
+stock_list_df = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/stock_list.pkl")
 stock_total_release = pd.read_pickle("/home/pineapple/Documents/stock/crawler/stock_total_release.pkl")
 result = []
 for s in tqdm(stock_list_df.index):
