@@ -18,15 +18,16 @@ today = date.today()
 #day = today.strftime("%m/%d")
 #datestr = today.strftime("%Y-%m-%d")
 #datestr = '2022-08-11'
-for stock_id in tqdm(stock_list.index):
+for stock_id in tqdm(['1101','6830']):#stock_list.index
     if(stock_id in three.index.levels[0]):
         old_date = three.loc[stock_id].iloc[-1].name.strftime("%Y-%m-%d")
     else:
         old_date = str(today)
     if(old_date<=str(today) or three.loc[(stock_id,old_date)].isna().any()):
         #print(stock_id)
+        #print(stock_id in three.index.levels[0])
         try:
-            r = requests.get('https://concords.moneydj.com/z/zc/zcl/zcl.djhtm?a='+stock_id+'&c='+old_date+'&d='+str(today))
+            r = requests.get('https://concords.moneydj.com/z/zc/zcl/zcl.djhtm?a='+stock_id+'&c='+old_date+'&d='+str(today))#
             #https://concords.moneydj.com/z/zc/zcl/zcl_1101.djhtm
             soup = BeautifulSoup(r.text, 'html.parser')
             data = soup.find_all("td", class_ = ["t3n0","t3r1","t3n1"])
@@ -44,11 +45,11 @@ for stock_id in tqdm(stock_list.index):
                     print('no new data 投信',stock_id,i)
                     pass
                 try:
-                    #print('old_date',old_date)
-                    #print('date', date)
+                    # print('old_date',old_date)
+                    # print('date', date)
+                    #print(three.loc[(stock_id,date)].isna().any())
                     if(old_date<=date):
-                        
-                        if(three.loc[(stock_id,date)].isna().any()):
+                        if(stock_id not in three.index.levels[0] or three.loc[(stock_id,date)].isna().any()):
                             three.loc[(stock_id,date),'投信買賣超(張)'] = float(data[i+2].getText().replace(',',''))
                             three.loc[(stock_id,date),'投信買賣超%'] = round(float(data[i+2].getText().replace(',',''))/total_release*100,2)
                             three.loc[(stock_id,date),'投信持股比例'] = round(float(data[i+6].getText().replace(',',''))/total_release*100,2)
@@ -62,7 +63,7 @@ for stock_id in tqdm(stock_list.index):
                             three.loc[(stock_id,date),'自營商持股比例'] = round(float(data[i+7].getText().replace(',',''))/total_release*100,2)
                             print('三大 update: ',stock_id,data[i].getText(),data[i+1].getText(),data[i+2].getText(),data[i+3].getText(),data[i+5].getText(),data[i+6].getText(),data[i+7].getText())
                 except:
-                    print('no new data 三大',stock_id,i)
+                    print('no new data 三大2',stock_id,i)
                     pass
         except:
             print('error: ', stock_id)
