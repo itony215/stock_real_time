@@ -1,19 +1,23 @@
 import pickle
 import requests
 from datetime import date
+from datetime import datetime
 from io import StringIO
 import pandas as pd
 import json
 def transform_date(date):   
         y, m, d = date.split('/')
         return str(int(y)+1911) + '/' + m  + '/' + d
+def transform_date2(date):
+        y, m, d = date.split('/')
+        return str(int(y)-1911) + '/' + m  + '/' + d
 
-high = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/最高價.pkl")
-low = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/最低價.pkl")
-start = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/開盤價.pkl")
-end = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/收盤價.pkl")
-volumn = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/成交股數.pkl")
-count = pd.read_pickle("/home/pineapple/Documents/stock/crawler/history/成交筆數.pkl")
+high = pd.read_pickle("/home/pitaya/Documents/stock_hub/crawler/history/最高價.pkl")
+low = pd.read_pickle("/home/pitaya/Documents/stock_hub/crawler/history/最低價.pkl")
+start = pd.read_pickle("/home/pitaya/Documents/stock_hub/crawler/history/開盤價.pkl")
+end = pd.read_pickle("/home/pitaya/Documents/stock_hub/crawler/history/收盤價.pkl")
+volumn = pd.read_pickle("/home/pitaya/Documents/stock_hub/crawler/history/成交股數.pkl")
+count = pd.read_pickle("/home/pitaya/Documents/stock_hub/crawler/history/成交筆數.pkl")
 
 today = date.today()
 df_time=pd.Timestamp(today)
@@ -26,9 +30,10 @@ lowPrice={}
 endPrice={}
 volumnPart={}
 countPart={}
-#datestr = '20230220'
-#day = '2023/02/20'
-#df_time=pd.Timestamp(day)
+#datestr = '20240912'#
+#day = '2024/09/12'#
+#df_time=pd.Timestamp(day)#
+datestr2 = transform_date2(day)
 #上市
 r = requests.post('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=' + datestr + '&type=ALL')
 if datestr in r.headers["Content-disposition"] and len(r.text)>0:
@@ -48,11 +53,14 @@ if datestr in r.headers["Content-disposition"] and len(r.text)>0:
             print('error 1:', i)
             continue
 #上櫃
-r2 = requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php')
+r2 = requests.post('https://www.tpex.org.tw/web/stock/aftertrading/daily_close_quotes/stk_quote_result.php?l=zh-tw&d=' + datestr2)
+print(datestr2)
 json_data = json.loads(r2.text)
-stock_json = json_data["aaData"]
-#print(stock_json)
-if transform_date(json_data['reportDate']) == day and len(r.text)>0:
+stock_json = json_data['tables'][0]['data']
+date_str = json_data['date']
+date_obj = datetime.strptime(date_str, "%Y%m%d")
+formatted_date_str = date_obj.strftime("%Y/%m/%d")
+if formatted_date_str == day and len(r.text)>0:
     print('it is today data 2')
     df2 = pd.DataFrame(stock_json)
     df2 = df2.set_index([0])
@@ -74,39 +82,39 @@ if transform_date(json_data['reportDate']) == day and len(r.text)>0:
     start_merge.index.name = 'date'
     start_merge.columns.name= 'stock_id'
     start_merge = start_merge[~start_merge.index.duplicated(keep='last')]
-    start_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/開盤價.pkl")
+    start_merge.to_pickle("/home/pitaya/Documents/stock_hub/crawler/history/開盤價.pkl")
 
     high_new = pd.DataFrame([highPrice], index = [df_time])
     high_merge = pd.concat([high,high_new])
     high_merge.index.name = 'date'
     high_merge.columns.name= 'stock_id'
     high_merge = high_merge[~high_merge.index.duplicated(keep='last')]
-    high_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/最高價.pkl")
+    high_merge.to_pickle("/home/pitaya/Documents/stock_hub/crawler/history/最高價.pkl")
 
     low_new = pd.DataFrame([lowPrice], index = [df_time])
     low_merge = pd.concat([low,low_new])
     low_merge.index.name = 'date'
     low_merge.columns.name= 'stock_id'
     low_merge = low_merge[~low_merge.index.duplicated(keep='last')]
-    low_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/最低價.pkl")
+    low_merge.to_pickle("/home/pitaya/Documents/stock_hub/crawler/history/最低價.pkl")
 
     end_new = pd.DataFrame([endPrice], index = [df_time])
     end_merge = pd.concat([end,end_new])
     end_merge.index.name = 'date'
     end_merge.columns.name= 'stock_id'
     end_merge = end_merge[~end_merge.index.duplicated(keep='last')]
-    end_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/收盤價.pkl")
+    end_merge.to_pickle("/home/pitaya/Documents/stock_hub/crawler/history/收盤價.pkl")
 
     volumn_new = pd.DataFrame([volumnPart], index = [df_time])
     volumn_merge = pd.concat([volumn,volumn_new])
     volumn_merge.index.name = 'date'
     volumn_merge.columns.name= 'stock_id'
     volumn_merge = volumn_merge[~volumn_merge.index.duplicated(keep='last')]
-    volumn_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/成交股數.pkl")
+    volumn_merge.to_pickle("/home/pitaya/Documents/stock_hub/crawler/history/成交股數.pkl")
 
     count_new = pd.DataFrame([countPart], index = [df_time])
     count_merge = pd.concat([count,count_new])
     count_merge.index.name = 'date'
     count_merge.columns.name= 'stock_id'
     count_merge = count_merge[~count_merge.index.duplicated(keep='last')]
-    count_merge.to_pickle("/home/pineapple/Documents/stock/crawler/history/成交筆數.pkl")
+    count_merge.to_pickle("/home/pitaya/Documents/stock_hub/crawler/history/成交筆數.pkl")
