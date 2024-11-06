@@ -28,7 +28,7 @@ gain = (delta.where(delta > 0, 0)).fillna(0)
 loss = (-delta.where(delta < 0, 0)).fillna(0)
 
 # 計算平均上漲和平均下跌
-window_length = 6
+window_length = 9
 avg_gain = gain.rolling(window=window_length, min_periods=1).mean()
 avg_loss = loss.rolling(window=window_length, min_periods=1).mean()
 
@@ -46,8 +46,9 @@ rsi_above_80 = last_day_rsi[last_day_rsi > 80]
 # 過濾出前 30 天最大的 RSI 不是出現在最後一天的股票
 filtered_stocks = []
 for stock in rsi_above_80.index:
-    last_30_days_rsi = rsi[stock].iloc[-31:-1]  # 前 30 天的 RSI
-    if last_30_days_rsi.max() != last_day_rsi[stock]:
+    last_30_days_rsi = rsi[stock].iloc[-31:-3]  # 前 30 天的 RSI
+    if last_30_days_rsi.max() > last_day_rsi[stock]:
+        #print(last_30_days_rsi.max(),last_day_rsi[stock],stock)
         filtered_stocks.append(stock)
 
 final_filtered_stocks = []
@@ -65,7 +66,8 @@ for stock in final_filtered_stocks:
     stock_name = stock_list_df[stock_list_df.index==stock]['name'].values[0]
     stock_price = end[stock].iloc[-1]
     notice += f"{stock}, {stock_name}, {stock_price}" + '\n'
+    
 
 
-
+#print(notice)
 lineNotify('X57Kb4EhV6073WKCE9UU2eT3IBvxmY44LPtmdUwwS8O', notice)
