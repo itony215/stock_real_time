@@ -35,14 +35,18 @@ try:
     new_df[['ID', 'name']] = new_df['股票名稱'].str.split("','", expand=True)
     #new_df = new_df[['ID', 'name', '撮合方式', '處份起始日', '處份截止日']]
     moving_average = end.rolling(window=20).mean()
-
+    new_df['多頭'] = new_df.apply(lambda row: end[row['ID']].iloc[-1] > moving_average[row['ID']].iloc[-1], axis=1)
     # Filter new_df to include only rows where the closing price is above the moving average
-    filtered_df = new_df[new_df['ID'].isin(end.columns)]
-    filtered_df = filtered_df[filtered_df.apply(lambda row: end[row['ID']].iloc[-1] > moving_average[row['ID']].iloc[-1], axis=1)]
-    filtered_df = filtered_df[['ID', 'name', '撮合方式', '處份 起始日', '處份 截止日']]
-    print(filtered_df)
+    #filtered_df = new_df[new_df['ID'].isin(end.columns)]
+    #filtered_df = filtered_df[filtered_df.apply(lambda row: end[row['ID']].iloc[-1] > moving_average[row['ID']].iloc[-1], axis=1)]
+    new_df = new_df[['ID', 'name', '撮合方式', '處份 起始日', '處份 截止日','多頭']]
+    print(new_df)
 except:
     print('no data')
-df_styled = filtered_df.style.background_gradient() 
+def highlight_false(s):
+        return ['background-color: gray' if v == False else '' for v in s]
+
+df_styled = new_df.style.apply(highlight_false, subset=['多頭'])
+    
 dfi.export(df_styled,"filtered_df.png")
 send_line_notify('X57Kb4EhV6073WKCE9UU2eT3IBvxmY44LPtmdUwwS8O', '多頭處置股', 'filtered_df.png')
