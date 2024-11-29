@@ -17,7 +17,7 @@ def send_line_notify(token, message, image_path):
 # Save the DataFrame as an image
 
 
-end = pd.read_pickle("./history/收盤價.pkl")
+end = pd.read_pickle("/home/pitaya/Documents/stock_hub/crawler/history/收盤價.pkl")
 
 
 try:
@@ -33,6 +33,7 @@ try:
     new_df['股票名稱'] =  new_df['股票名稱'].str[21:-9]
     new_df = new_df.iloc[:, :-3]
     new_df[['ID', 'name']] = new_df['股票名稱'].str.split("','", expand=True)
+    new_df = new_df[new_df['ID'].astype(str).str.match(r'^\d{4}$')]
     #new_df = new_df[['ID', 'name', '撮合方式', '處份起始日', '處份截止日']]
     moving_average = end.rolling(window=20).mean()
     new_df['多頭'] = new_df.apply(lambda row: end[row['ID']].iloc[-1] > moving_average[row['ID']].iloc[-1], axis=1)
@@ -49,4 +50,4 @@ def highlight_false(s):
 df_styled = new_df.style.apply(highlight_false, subset=['多頭'])
     
 dfi.export(df_styled,"filtered_df.png")
-send_line_notify('X57Kb4EhV6073WKCE9UU2eT3IBvxmY44LPtmdUwwS8O', '多頭處置股', 'filtered_df.png')
+send_line_notify('vehN5iRpqhaG4vG0zGzooliq6VsXPUFFqe0u8v0ydfK', '多頭處置股', 'filtered_df.png')
