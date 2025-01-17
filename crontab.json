@@ -1,0 +1,84 @@
+55 23 * * 6 sh /home/ics/crawler/backup.sh
+
+
+#8 16 * * 1-5 python3 /home/pitaya/Documents/stock/stock_1k.py >> /home/pitaya/Documents/stock/stock_1k.txt 2>&1
+#30 23 * * 1-5 sh /home/pitaya/Documents/stock/backup_stock.sh
+
+33 13 * * 1-5 python3 /home/ics/crawler/flat_viewer/getinfo.py >> /home/ics/crawler/flat_viewer/getinfo.txt 2>&1
+0 14 * * 1-5 python3 /home/ics/crawler/flat_viewer/getchart.py >> /home/ics/crawler/flat_viewer/getchart.txt 2>&1
+55 15 * * 1-5 python3 /home/ics/crawler/flat_viewer/output_data.py >> /home/ics/crawler/flat_viewer/output_data.txt 2>&1
+5 16 * * 1-5 python3 /home/ics/crawler/flat_viewer/json_to_streamdata.py >> /home/ics/crawler/flat_viewer/streamdata.txt 2>&1
+10 16 * * 1-5 sh /home/ics/crawler/flat_viewer/push_to_github.sh
+
+
+5 15 * * 1-5 python3 /home/ics/crawler/update_price.py >> /home/ics/crawler/update_price.txt 2>&1
+10 15 * * 1-5 python3 /home/ics/crawler/too_high_stock.py >> /home/ics/crawler/too_high_stock.txt 2>&1
+18 15 * * 1-5 python3 /home/ics/crawler/too_high_stock_alert.py >> /home/ics/crawler/too_high_stock_alert.txt 2>&1
+20 15 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_5.py >> /home/ics/crawler/strategy/strategy_sell_5.txt 2>&1
+22 15 * * 1-5 python3 /home/ics/crawler/strategy/strategy_buy_3.py >> /home/ics/crawler/strategy/strategy_buy_3.txt 2>&1
+
+
+23 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price.py >> /home/ics/crawler/strategy/strategy_price.txt 2>&1
+28 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_11.py >> /home/ics/crawler/strategy/strategy_price_11.txt 2>&1
+28 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_12.py >> /home/ics/crawler/strategy/strategy_price_12.txt 2>&1
+29 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_13.py >> /home/ics/crawler/strategy/strategy_price_13.txt 2>&1
+29 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_14.py >> /home/ics/crawler/strategy/strategy_price_14.txt 2>&1
+30 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_15.py >> /home/ics/crawler/strategy/strategy_price_15.txt 2>&1
+30 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_16.py >> /home/ics/crawler/strategy/strategy_price_16.txt 2>&1
+31 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_17.py >> /home/ics/crawler/strategy/strategy_price_17.txt 2>&1
+31 15  * * 1-5 python3 /home/ics/crawler/strategy/strategy_price_18.py >> /home/ics/crawler/strategy/strategy_price_18.txt 2>&1
+
+
+
+20 15 * * 1-5 python3 /home/ics/crawler/three/update_three.py >> /home/ics/crawler/three/three.txt 2>&1
+55 15 * * 1-5 python3 /home/ics/crawler/strategy/strategy.py >> /home/ics/crawler/strategy/strategy.txt 2>&1
+0 16 * * 1-5 python3 /home/ics/crawler/strategy/strategy_1.py >> /home/ics/crawler/strategy/strategy_1.txt 2>&1
+1 16 * * 1-5 python3 /home/ics/crawler/strategy/strategy_buy_2.py >> /home/ics/crawler/strategy/strategy_buy_2.txt 2>&1
+5 16 * * 1-5 sh /home/ics/crawler/strategy/backup.sh
+33 16 * * 1-5 python3 /home/ics/crawler/flat_viewer/getinfo.py >> /home/ics/crawler/flat_viewer/getinfo.txt 2>&1
+30 17 * * 1-5 python3 /home/ics/crawler/flat_viewer/getchart.py >> /home/ics/crawler/flat_viewer/getchart.txt 2>&1
+
+
+10 18 * * 1-5 python3 /home/ics/crawler/three/update_three.py >> /home/ics/crawler/three/three.txt 2>&1
+0 19 * * 1-5 python3 /home/ics/crawler/update_etf_buy.py >> /home/ics/crawler/update_etf_buy.txt 2>&1
+13 18 * * 1-5 python3 /home/ics/crawler/main/update_main.py >> /home/ics/crawler/main/main.txt 2>&1
+0 21 * * 1-5 python3 /home/ics/crawler/margin/update_margin.py >> /home/ics/crawler/margin/update_margin.txt 2>&1
+
+0 22 * * 1-5 python3 /home/ics/crawler/flat_viewer/output_data.py >> /home/ics/crawler/flat_viewer/output_data.txt 2>&1
+10 22 * * 1-5 python3 /home/ics/crawler/flat_viewer/json_to_streamdata.py >> /home/ics/crawler/flat_viewer/streamdata.txt 2>&1
+20 22 * * 1-5 sh /home/ics/crawler/flat_viewer/push_to_github.sh
+
+
+45 21 * * 1-5 python3 /home/ics/crawler/strategy/strategy.py >> /home/ics/crawler/strategy/strategy.txt 2>&1
+55 21 * * 1-5 python3 /home/ics/crawler/strategy/strategy_1.py >> /home/ics/crawler/strategy/strategy_1.txt 2>&1
+16 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell.py >> /home/ics/crawler/strategy/strategy_sell.txt 2>&1
+19 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_7.py >> /home/ics/crawler/strategy/strategy_sell_7.txt 2>&1
+
+20 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_11.py >> /home/ics/crawler/strategy/strategy_sell_11.txt 2>&1
+21 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_2.py >> /home/ics/crawler/strategy/strategy_sell_2.txt 2>&1
+22 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_12.py >> /home/ics/crawler/strategy/strategy_sell_12.txt 2>&1
+22 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_13.py >> /home/ics/crawler/strategy/strategy_sell_13.txt 2>&1
+22 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_14.py >> /home/ics/crawler/strategy/strategy_sell_14.txt 2>&1
+23 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_15.py >> /home/ics/crawler/strategy/strategy_sell_15.txt 2>&1
+23 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_16.py >> /home/ics/crawler/strategy/strategy_sell_16.txt 2>&1
+23 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_17.py >> /home/ics/crawler/strategy/strategy_sell_17.txt 2>&1
+23 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_18.py >> /home/ics/crawler/strategy/strategy_sell_18.txt 2>&1
+23 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_19.py >> /home/ics/crawler/strategy/strategy_sell_19.txt 2>&1
+24 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_buy_1.py >> /home/ics/crawler/strategy/strategy_buy_1.txt 2>&1
+25 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_6.py >> /home/ics/crawler/strategy/strategy_sell_6.txt 2>&1
+25 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_8.py >> /home/ics/crawler/strategy/strategy_sell_8.txt 2>&1
+25 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_sell_9.py >> /home/ics/crawler/strategy/strategy_sell_9.txt 2>&1
+25 22 * * 1-5 python3 /home/ics/crawler/attention_stock.py >> /home/ics/crawler/attention_stock.txt 2>&1
+
+30 21 * * 1-5 python3 /home/ics/crawler/update_earn.py >> /home/ics/crawler/update_earn.txt 2>&1
+22 22 * * 1-5 python3 /home/ics/crawler/strategy/strategy_earn.py >> /home/ics/crawler/strategy/strategy_earn.txt 2>&1
+30 22 * * 1-5 sh /home/ics/crawler/strategy/backup.sh
+25 23 * * 1-5 sh /home/ics/crawler/strategy/backup_strategy.sh
+
+
+
+30 23 * * 1-5 python3 /home/ics/crawler/update_eps.py >> /home/ics/crawler/update_eps.txt 2>&1
+
+
+45 21 * * 6 python3 /home/ics/crawler/stock_list.py >> /home/ics/crawler/stock_list.txt 2>&1
+50 22 * * 6 python3 /home/ics/crawler/stock_total_release.py >> /home/ics/crawler/stock_total_release.txt 2>&1
