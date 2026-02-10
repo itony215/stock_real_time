@@ -9,8 +9,8 @@ from linebot.exceptions import LineBotApiError
 # 1. 設定 LINE Messaging API 資訊
 # ==========================================
 # 請填入上一篇教學中取得的資料
-CHANNEL_ACCESS_TOKEN = 'jgrDhhWI+3Qcepbj/RM0vNdzTx8hqTw4xYP7pxn5YIR9UkhvalIwIpEbGYw0y/RKawEEOQbgIPYBZAVOQPnUSyJjNfxUfpnNVQohlHls0JYpzonOBchiAaPEFeEn9T12hiDu1WIBs0Gp4QbDeYK0JAdB04t89/1O/w1cDnyilFU='
-YOUR_USER_ID = 'U9cc157ff55a08d57beabd64bc29a3020'
+CHANNEL_ACCESS_TOKEN = ''
+YOUR_USER_ID = ''
 
 # 初始化機器人
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
